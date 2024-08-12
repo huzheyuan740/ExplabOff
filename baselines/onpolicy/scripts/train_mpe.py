@@ -17,39 +17,11 @@ sys.path.append(os.path.abspath(os.getcwd()))
 
 from utils.utils import print_args, print_box, connected_to_internet
 from baselines.onpolicy.config import get_config
-from multiagent.MPE_env import MPEEnv, GraphMPEEnv
 from mec_env.environment_manager import EnvironmentManager
 
 from baselines.onpolicy.envs.env_wrappers import SubprocVecEnv, DummyVecEnv, GraphSubprocVecEnv, GraphDummyVecEnv
 
 """Train script for MPEs."""
-
-
-def make_train_env(all_args: argparse.Namespace):
-    def get_env_fn(rank: int):
-        def init_env():
-            if all_args.env_name == "MPE":
-                env = MPEEnv(all_args)
-            elif all_args.env_name == "GraphMPE":
-                env = GraphMPEEnv(all_args)
-            else:
-                print(f"Can not support the {all_args.env_name} environment")
-                raise NotImplementedError
-            env.seed(all_args.seed + rank * 1000)
-            return env
-
-        return init_env
-
-    if all_args.n_rollout_threads == 1:
-        if all_args.env_name == "GraphMPE":
-            return GraphDummyVecEnv([get_env_fn(0)])
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        if all_args.env_name == "GraphMPE":
-            return GraphSubprocVecEnv([get_env_fn(i) for i in
-                                       range(all_args.n_rollout_threads)])
-        return SubprocVecEnv([get_env_fn(i) for i in
-                              range(all_args.n_rollout_threads)])
 
 
 def make_train_mec_env(all_args, mec_config):
@@ -60,33 +32,6 @@ def make_train_mec_env(all_args, mec_config):
 def make_eval_mec_env(all_args, mec_config):
     env = EnvironmentManager(mec_config)
     return env
-
-
-def make_eval_env(all_args: argparse.Namespace):
-    def get_env_fn(rank: int):
-        def init_env():
-            if all_args.env_name == "MPE":
-                env = MPEEnv(all_args)
-            elif all_args.env_name == "GraphMPE":
-                env = GraphMPEEnv(all_args)
-            else:
-                print(f"Can not support the {all_args.env_name} environment")
-                raise NotImplementedError
-            env.seed(all_args.seed * 50000 + rank * 10000)
-            return env
-
-        return init_env
-
-    if all_args.n_eval_rollout_threads == 1:
-        if all_args.env_name == "GraphMPE":
-            return GraphDummyVecEnv([get_env_fn(0)])
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        if all_args.env_name == "GraphMPE":
-            return GraphSubprocVecEnv([get_env_fn(i) for i in
-                                       range(all_args.n_rollout_threads)])
-        return SubprocVecEnv([get_env_fn(i) for i in
-                              range(all_args.n_eval_rollout_threads)])
 
 
 def parse_args(args, parser):
@@ -124,9 +69,7 @@ def main(args):
     parser = get_config()
     all_args, parser = parse_args(args, parser)
     mec_config = None
-    if all_args.env_name == "GraphMPE":
-        from onpolicy.config import graph_config
-        all_args, parser = graph_config(args, parser)
+
     if all_args.env_name == "MEC":
         print("~~~~~~~~~~~~~~~~~~~~~")
         from baselines.onpolicy.config import graph_config
@@ -255,8 +198,8 @@ def main(args):
     # run experiments
     if all_args.share_policy:
         if all_args.env_name == "GraphMPE" or all_args.env_name == "MEC":
-        #     from onpolicy.runner.shared.graph_mpe_runner import GMPERunner as Runner
-        # else:
+            #     from onpolicy.runner.shared.graph_mpe_runner import GMPERunner as Runner
+            # else:
             from baselines.onpolicy.runner.shared.mpe_runner import MPERunner as Runner
     else:
         if all_args.env_name == "GraphMPE":

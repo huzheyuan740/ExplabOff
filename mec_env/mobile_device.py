@@ -18,15 +18,14 @@ class MobileDevice:
         self.computing_ability_max = self.mobile_device_config.mobile_device_ability_max
         self.computing_ability_now = self.mobile_device_config.mobile_device_ability
 
-        self.task = None  # Task(mobile_device_id, self.global_config)  # TODO 这里会产生什么问题
+        self.task = None
         self.task_queue = TaskQueue(self, global_config)
-        # self.task_data_size_list = task_data_size_list
-        # 下面这两行感觉可以在TaskQueue类中进行功能实现
+
         self.task_queue_current_data_size = 0
         self.task_queue_size_max = self.mobile_device_config.task_queue_size_max
 
     def create_task(self, mobile_device_id):
         self.task = Task(mobile_device_id, self.global_config)
 
-    def update_task(self, mobile_device_id):  # 更新任务应该用不到 每个时间片都应该是create_task()
+    def update_task(self, mobile_device_id):
         self.task = Task(mobile_device_id, self.global_config)

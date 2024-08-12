@@ -451,124 +451,6 @@ class MA_T_DDPG(object):
                 pos_action9 = torch.FloatTensor(pos_action9).to(self.device)
                 pos_action = [pos_action1, pos_action2, pos_action3, pos_action4, pos_action5, pos_action6, pos_action7,
                               pos_action8, pos_action9]
-            elif self.num_agent == 12:
-                pos_action1 = []
-                pos_action2 = []
-                pos_action3 = []
-                pos_action4 = []
-                pos_action5 = []
-                pos_action6 = []
-                pos_action7 = []
-                pos_action8 = []
-                pos_action9 = []
-                pos_action10 = []
-                pos_action11 = []
-                pos_action12 = []
-                for i in range(len(pos_action)):
-                    pos_action1.append(pos_action[i][0])
-                    pos_action2.append(pos_action[i][1])
-                    pos_action3.append(pos_action[i][2])
-                    pos_action4.append(pos_action[i][3])
-                    pos_action5.append(pos_action[i][4])
-                    pos_action6.append(pos_action[i][5])
-                    pos_action7.append(pos_action[i][6])
-                    pos_action8.append(pos_action[i][7])
-                    pos_action9.append(pos_action[i][8])
-                    pos_action10.append(pos_action[i][9])
-                    pos_action11.append(pos_action[i][10])
-                    pos_action12.append(pos_action[i][11])
-                pos_action1 = torch.FloatTensor(pos_action1).to(self.device)
-                pos_action2 = torch.FloatTensor(pos_action2).to(self.device)
-                pos_action3 = torch.FloatTensor(pos_action3).to(self.device)
-                pos_action4 = torch.FloatTensor(pos_action4).to(self.device)
-                pos_action5 = torch.FloatTensor(pos_action5).to(self.device)
-                pos_action6 = torch.FloatTensor(pos_action6).to(self.device)
-                pos_action7 = torch.FloatTensor(pos_action7).to(self.device)
-                pos_action8 = torch.FloatTensor(pos_action8).to(self.device)
-                pos_action9 = torch.FloatTensor(pos_action9).to(self.device)
-                pos_action10 = torch.FloatTensor(pos_action10).to(self.device)
-                pos_action11 = torch.FloatTensor(pos_action11).to(self.device)
-                pos_action12 = torch.FloatTensor(pos_action12).to(self.device)
-                pos_action = [pos_action1, pos_action2, pos_action3, pos_action4, pos_action5, pos_action6, pos_action7,
-                              pos_action8, pos_action9, pos_action10, pos_action11, pos_action12]
-            elif self.num_agent == 24:
-                pos_action1 = []
-                pos_action2 = []
-                pos_action3 = []
-                pos_action4 = []
-                pos_action5 = []
-                pos_action6 = []
-                pos_action7 = []
-                pos_action8 = []
-                pos_action9 = []
-                pos_action10 = []
-                pos_action11 = []
-                pos_action12 = []
-                pos_action13 = []
-                pos_action14 = []
-                pos_action15 = []
-                pos_action16 = []
-                pos_action17 = []
-                pos_action18 = []
-                pos_action19 = []
-                pos_action20 = []
-                pos_action21 = []
-                pos_action22 = []
-                pos_action23 = []
-                pos_action24 = []
-                for i in range(len(pos_action)):
-                    pos_action1.append(pos_action[i][0])
-                    pos_action2.append(pos_action[i][1])
-                    pos_action3.append(pos_action[i][2])
-                    pos_action4.append(pos_action[i][3])
-                    pos_action5.append(pos_action[i][4])
-                    pos_action6.append(pos_action[i][5])
-                    pos_action7.append(pos_action[i][6])
-                    pos_action8.append(pos_action[i][7])
-                    pos_action9.append(pos_action[i][8])
-                    pos_action10.append(pos_action[i][9])
-                    pos_action11.append(pos_action[i][10])
-                    pos_action12.append(pos_action[i][11])
-                    pos_action13.append(pos_action[i][12])
-                    pos_action14.append(pos_action[i][13])
-                    pos_action15.append(pos_action[i][14])
-                    pos_action16.append(pos_action[i][15])
-                    pos_action17.append(pos_action[i][16])
-                    pos_action18.append(pos_action[i][17])
-                    pos_action19.append(pos_action[i][18])
-                    pos_action20.append(pos_action[i][19])
-                    pos_action21.append(pos_action[i][20])
-                    pos_action22.append(pos_action[i][21])
-                    pos_action23.append(pos_action[i][22])
-                    pos_action24.append(pos_action[i][23])
-                pos_action1 = torch.FloatTensor(pos_action1).to(self.device)
-                pos_action2 = torch.FloatTensor(pos_action2).to(self.device)
-                pos_action3 = torch.FloatTensor(pos_action3).to(self.device)
-                pos_action4 = torch.FloatTensor(pos_action4).to(self.device)
-                pos_action5 = torch.FloatTensor(pos_action5).to(self.device)
-                pos_action6 = torch.FloatTensor(pos_action6).to(self.device)
-                pos_action7 = torch.FloatTensor(pos_action7).to(self.device)
-                pos_action8 = torch.FloatTensor(pos_action8).to(self.device)
-                pos_action9 = torch.FloatTensor(pos_action9).to(self.device)
-                pos_action10 = torch.FloatTensor(pos_action10).to(self.device)
-                pos_action11 = torch.FloatTensor(pos_action11).to(self.device)
-                pos_action12 = torch.FloatTensor(pos_action12).to(self.device)
-                pos_action13 = torch.FloatTensor(pos_action13).to(self.device)
-                pos_action14 = torch.FloatTensor(pos_action14).to(self.device)
-                pos_action15 = torch.FloatTensor(pos_action15).to(self.device)
-                pos_action16 = torch.FloatTensor(pos_action16).to(self.device)
-                pos_action17 = torch.FloatTensor(pos_action17).to(self.device)
-                pos_action18 = torch.FloatTensor(pos_action18).to(self.device)
-                pos_action19 = torch.FloatTensor(pos_action19).to(self.device)
-                pos_action20 = torch.FloatTensor(pos_action20).to(self.device)
-                pos_action21 = torch.FloatTensor(pos_action21).to(self.device)
-                pos_action22 = torch.FloatTensor(pos_action22).to(self.device)
-                pos_action23 = torch.FloatTensor(pos_action23).to(self.device)
-                pos_action24 = torch.FloatTensor(pos_action24).to(self.device)
-                pos_action = [pos_action1, pos_action2, pos_action3, pos_action4, pos_action5, pos_action6, pos_action7,
-                              pos_action8, pos_action9, pos_action10, pos_action11, pos_action12, pos_action13,
-                              pos_action14, pos_action15, pos_action16, pos_action17, pos_action18, pos_action19,
-                              pos_action20, pos_action21, pos_action22, pos_action23, pos_action24]
 
             pos_state = torch.FloatTensor(pos_state).to(self.device)
 
@@ -586,16 +468,6 @@ class MA_T_DDPG(object):
             elif self.num_agent == 9:
                 tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
                                  pos_action[5], pos_action[6], pos_action[7], pos_action[8]]
-            elif self.num_agent == 12:
-                tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
-                                 pos_action[5], pos_action[6], pos_action[7], pos_action[8], pos_action[9],
-                                 pos_action[10], pos_action[11]]
-            elif self.num_agent == 24:
-                tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
-                                 pos_action[5], pos_action[6], pos_action[7], pos_action[8], pos_action[9],
-                                 pos_action[10], pos_action[11], pos_action[12], pos_action[13], pos_action[14],
-                                 pos_action[15], pos_action[16], pos_action[17], pos_action[18], pos_action[19],
-                                 pos_action[20], pos_action[21], pos_action[22], pos_action[23]]
 
             pos_loaa, pos_MI = self.mine_policy(pos_state, torch.cat(tp_pos_action, -1))
 
@@ -610,7 +482,7 @@ class MA_T_DDPG(object):
 
     def train_club(self, replay_buffer, iterations, batch_size=64):
         min_MI_loss_list = []
-        for it in range(iterations):  # 目前只循环一次
+        for it in range(iterations):
             pos_action, pos_obs, pos_state = replay_buffer.sample_pos(batch_size)
             pos_action1 = []
             pos_action2 = []
@@ -716,132 +588,6 @@ class MA_T_DDPG(object):
                               pos_action8, pos_action9]
                 tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
                                  pos_action[5], pos_action[6], pos_action[7], pos_action[8]]
-            elif self.num_agent == 12:
-                pos_action1 = []
-                pos_action2 = []
-                pos_action3 = []
-                pos_action4 = []
-                pos_action5 = []
-                pos_action6 = []
-                pos_action7 = []
-                pos_action8 = []
-                pos_action9 = []
-                pos_action10 = []
-                pos_action11 = []
-                pos_action12 = []
-                for i in range(len(pos_action)):
-                    pos_action1.append(pos_action[i][0])
-                    pos_action2.append(pos_action[i][1])
-                    pos_action3.append(pos_action[i][2])
-                    pos_action4.append(pos_action[i][3])
-                    pos_action5.append(pos_action[i][4])
-                    pos_action6.append(pos_action[i][5])
-                    pos_action7.append(pos_action[i][6])
-                    pos_action8.append(pos_action[i][7])
-                    pos_action9.append(pos_action[i][8])
-                    pos_action10.append(pos_action[i][9])
-                    pos_action11.append(pos_action[i][10])
-                    pos_action12.append(pos_action[i][11])
-                pos_action1 = torch.FloatTensor(pos_action1).to(self.device)
-                pos_action2 = torch.FloatTensor(pos_action2).to(self.device)
-                pos_action3 = torch.FloatTensor(pos_action3).to(self.device)
-                pos_action4 = torch.FloatTensor(pos_action4).to(self.device)
-                pos_action5 = torch.FloatTensor(pos_action5).to(self.device)
-                pos_action6 = torch.FloatTensor(pos_action6).to(self.device)
-                pos_action7 = torch.FloatTensor(pos_action7).to(self.device)
-                pos_action8 = torch.FloatTensor(pos_action8).to(self.device)
-                pos_action9 = torch.FloatTensor(pos_action9).to(self.device)
-                pos_action10 = torch.FloatTensor(pos_action10).to(self.device)
-                pos_action11 = torch.FloatTensor(pos_action11).to(self.device)
-                pos_action12 = torch.FloatTensor(pos_action12).to(self.device)
-                pos_action = [pos_action1, pos_action2, pos_action3, pos_action4, pos_action5, pos_action6, pos_action7,
-                              pos_action8, pos_action9, pos_action10, pos_action11, pos_action12]
-                tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
-                                 pos_action[5], pos_action[6], pos_action[7], pos_action[8], pos_action[9],
-                                 pos_action[10], pos_action[11]]
-            elif self.num_agent == 24:
-                pos_action1 = []
-                pos_action2 = []
-                pos_action3 = []
-                pos_action4 = []
-                pos_action5 = []
-                pos_action6 = []
-                pos_action7 = []
-                pos_action8 = []
-                pos_action9 = []
-                pos_action10 = []
-                pos_action11 = []
-                pos_action12 = []
-                pos_action13 = []
-                pos_action14 = []
-                pos_action15 = []
-                pos_action16 = []
-                pos_action17 = []
-                pos_action18 = []
-                pos_action19 = []
-                pos_action20 = []
-                pos_action21 = []
-                pos_action22 = []
-                pos_action23 = []
-                pos_action24 = []
-                for i in range(len(pos_action)):
-                    pos_action1.append(pos_action[i][0])
-                    pos_action2.append(pos_action[i][1])
-                    pos_action3.append(pos_action[i][2])
-                    pos_action4.append(pos_action[i][3])
-                    pos_action5.append(pos_action[i][4])
-                    pos_action6.append(pos_action[i][5])
-                    pos_action7.append(pos_action[i][6])
-                    pos_action8.append(pos_action[i][7])
-                    pos_action9.append(pos_action[i][8])
-                    pos_action10.append(pos_action[i][9])
-                    pos_action11.append(pos_action[i][10])
-                    pos_action12.append(pos_action[i][11])
-                    pos_action13.append(pos_action[i][12])
-                    pos_action14.append(pos_action[i][13])
-                    pos_action15.append(pos_action[i][14])
-                    pos_action16.append(pos_action[i][15])
-                    pos_action17.append(pos_action[i][16])
-                    pos_action18.append(pos_action[i][17])
-                    pos_action19.append(pos_action[i][18])
-                    pos_action20.append(pos_action[i][19])
-                    pos_action21.append(pos_action[i][20])
-                    pos_action22.append(pos_action[i][21])
-                    pos_action23.append(pos_action[i][22])
-                    pos_action24.append(pos_action[i][23])
-                pos_action1 = torch.FloatTensor(pos_action1).to(self.device)
-                pos_action2 = torch.FloatTensor(pos_action2).to(self.device)
-                pos_action3 = torch.FloatTensor(pos_action3).to(self.device)
-                pos_action4 = torch.FloatTensor(pos_action4).to(self.device)
-                pos_action5 = torch.FloatTensor(pos_action5).to(self.device)
-                pos_action6 = torch.FloatTensor(pos_action6).to(self.device)
-                pos_action7 = torch.FloatTensor(pos_action7).to(self.device)
-                pos_action8 = torch.FloatTensor(pos_action8).to(self.device)
-                pos_action9 = torch.FloatTensor(pos_action9).to(self.device)
-                pos_action10 = torch.FloatTensor(pos_action10).to(self.device)
-                pos_action11 = torch.FloatTensor(pos_action11).to(self.device)
-                pos_action12 = torch.FloatTensor(pos_action12).to(self.device)
-                pos_action13 = torch.FloatTensor(pos_action13).to(self.device)
-                pos_action14 = torch.FloatTensor(pos_action14).to(self.device)
-                pos_action15 = torch.FloatTensor(pos_action15).to(self.device)
-                pos_action16 = torch.FloatTensor(pos_action16).to(self.device)
-                pos_action17 = torch.FloatTensor(pos_action17).to(self.device)
-                pos_action18 = torch.FloatTensor(pos_action18).to(self.device)
-                pos_action19 = torch.FloatTensor(pos_action19).to(self.device)
-                pos_action20 = torch.FloatTensor(pos_action20).to(self.device)
-                pos_action21 = torch.FloatTensor(pos_action21).to(self.device)
-                pos_action22 = torch.FloatTensor(pos_action22).to(self.device)
-                pos_action23 = torch.FloatTensor(pos_action23).to(self.device)
-                pos_action24 = torch.FloatTensor(pos_action24).to(self.device)
-                pos_action = [pos_action1, pos_action2, pos_action3, pos_action4, pos_action5, pos_action6, pos_action7,
-                              pos_action8, pos_action9, pos_action10, pos_action11, pos_action12, pos_action13,
-                              pos_action14, pos_action15, pos_action16, pos_action17, pos_action18, pos_action19,
-                              pos_action20, pos_action21, pos_action22, pos_action23, pos_action24]
-                tp_pos_action = [pos_action[0], pos_action[1], pos_action[2], pos_action[3], pos_action[4],
-                                 pos_action[5], pos_action[6], pos_action[7], pos_action[8], pos_action[9],
-                                 pos_action[10], pos_action[11], pos_action[12], pos_action[13], pos_action[14],
-                                 pos_action[15], pos_action[16], pos_action[17], pos_action[18], pos_action[19],
-                                 pos_action[20], pos_action[21], pos_action[22], pos_action[23]]
 
             copy_action = torch.cat(tp_pos_action, -1)
 
@@ -867,7 +613,7 @@ class MA_T_DDPG(object):
         MI_lower_bound_list = []
         training_reward_list = []
         training_reward_Q_list = []
-        training_r_PMIC_list = []
+        training_r_ExplabOff_list = []
         for it in range(iterations):
             o, x, y, o_, u, r, d, ep_reward = replay_buffer.sample(batch_size)
 
@@ -898,41 +644,25 @@ class MA_T_DDPG(object):
                 half_MI = half_MI.detach()
                 MI_lower_bound = - neg_MI
             MI_lower_bound = MI_lower_bound.reshape(reward.shape)
-            # print("MI_upper_bound:", MI_upper_bound)
-            # print("MI_lower_bound:", MI_lower_bound)
-            r_PMIC = self.alpha_beta_network(MI_lower_bound, MI_upper_bound)
-            # print("r_PMIC:", r_PMIC)
-
-            # print(reward.shape, MI_upper_bound.shape, MI_lower_bound.shape)
-            # assert reward.shape[0] == MI_upper_bound.shape[0] == MI_lower_bound.shape[0]
-            # assert reward.shape[1] == MI_upper_bound.shape[1] == MI_lower_bound.shape[1]
+            r_ExplabOff = self.alpha_beta_network(MI_lower_bound, MI_upper_bound)
 
             training_reward_Q_list.append(torch.mean(reward, dim=0).item())
-            # print("target_Q0:", target_Q.requires_grad)
             target_Q = reward + (
-                        done * discount * target_Q).detach() + r_PMIC
-            # print("target_Q:", target_Q.requires_grad)
-            # exit()
+                        done * discount * target_Q).detach() + r_ExplabOff
+
             MI_upper_bound_list.append(torch.mean(MI_upper_bound, dim=0).item())
             MI_lower_bound_list.append(torch.mean(MI_lower_bound, dim=0).item())
             training_reward_list.append(torch.mean(reward, dim=0).item())
-            training_r_PMIC_list.append(
-                torch.mean(r_PMIC, dim=0).item())
+            training_r_ExplabOff_list.append(
+                torch.mean(r_ExplabOff, dim=0).item())
 
-            # print("current_Q:", current_Q)
-            # print("target_Q:", target_Q.shape)
-            # exit()
             # Compute critic loss
             alternative_step = int(10)
-            print("current_Q0:", current_Q)
-            print("target_Q0:", target_Q)
             whether_optimizer_update = False
             if 0 < total_timesteps % int(1500) < alternative_step and update_signal == False:
                 whether_optimizer_update = True
                 current_Q = current_Q.detach()
                 current_Q.requires_grad = False
-                print("current_Q1:", current_Q)
-                print("target_Q1:", target_Q)
             else:
                 target_Q = target_Q.detach()
                 target_Q.requires_grad = False
@@ -1001,7 +731,6 @@ class MA_T_DDPG(object):
 
                 self.actor_optimizer.step()
 
-                ### TODO  replace ...........
             for param, target_param in zip(self.critic.parameters(), self.critic_target.parameters()):
                 target_param.data.copy_(tau * param.data + (1 - tau) * target_param.data)
             for i in range(self.num_agent):
@@ -1010,7 +739,7 @@ class MA_T_DDPG(object):
 
         return np.mean(Q_loss_list), np.mean(min_mi_list), np.mean(max_mi_list), 0.0, 0.0, np.mean(
             MI_upper_bound_list), np.mean(MI_lower_bound_list), np.mean(training_reward_list), np.mean(
-            training_reward_Q_list), np.mean(training_r_PMIC_list)
+            training_reward_Q_list), np.mean(training_r_ExplabOff_list)
 
     def train(self, replay_buffer, iterations, batch_size=64, discount=0.99, tau=0.001):
 
@@ -1055,7 +784,6 @@ class MA_T_DDPG(object):
 
             for i in range(self.num_agent):
                 #  gen_action.append(self.actor(obs[:, i])[0])
-                #     print("???",obs[:, i].shape)
                 action, _, _ = self.actor[i](obs[:, i])
                 gen_action.append(action)
 
@@ -1092,8 +820,6 @@ class MA_T_DDPG(object):
     def load(self, filename, directory):
         for i in range(self.num_agent):
             self.actor[i].load_state_dict(torch.load('%s/%s_%s_actor.pth' % (directory, filename, str(i))))
-
-        # directory = "model/Org_Action_1_JSD_mi_0.05_100000_10_mine_MA_MINE_DDPG_HalfCheetah-v2_recon_100_0_1_0"
 
         self.critic.load_state_dict(torch.load('%s/%s_critic.pth' % (directory, filename)))
         self.critic_target.load_state_dict(self.critic.state_dict())

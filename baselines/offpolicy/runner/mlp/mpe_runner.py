@@ -118,7 +118,7 @@ class MPERunner(MlpRunner):
             obs = []
             num_agent = len(env.base_station_set.all_mobile_device_list)
             for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                each_state = env.get_state_per_mobile_device(mobile_device_id)
                 state_class_list.append(each_state)
                 state_list = each_state.get_state_list()
                 state_array = each_state.get_normalized_state_array()
@@ -126,7 +126,6 @@ class MPERunner(MlpRunner):
             state = np.concatenate(obs, -1)
             obs = np.array(obs)
             obs = np.expand_dims(obs, axis=0)
-            print("obs:", obs.shape)
             share_obs = obs.reshape(n_rollout_threads, -1)
 
             obs_batch = np.concatenate(obs)
@@ -174,7 +173,7 @@ class MPERunner(MlpRunner):
 
             next_obs = []
             for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                each_state = env.get_state_per_mobile_device(mobile_device_id)
                 state_array = each_state.get_normalized_state_array()
                 next_obs.append(state_array)
             next_state = np.concatenate(next_obs, -1)
@@ -199,10 +198,10 @@ class MPERunner(MlpRunner):
                 infos.append({'individual_reward': reward})
             # infos[:, :] = {'individual_reward': reward}
             infos = [infos]
-            print("next_obs:", next_obs.shape)
-            print("rewards:", rewards.shape)
-            print("dones:", dones.shape)
-            print("infos:", infos)
+            # print("next_obs:", next_obs.shape)
+            # print("rewards:", rewards.shape)
+            # print("dones:", dones.shape)
+            # print("infos:", infos)
 
             # ================================
             episode_rewards.append(rewards)
@@ -368,7 +367,7 @@ class MPERunner(MlpRunner):
             obs = []
             num_agent = len(env.base_station_set.all_mobile_device_list)
             for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                each_state = env.get_state_per_mobile_device(mobile_device_id)
                 state_class_list.append(each_state)
                 state_list = each_state.get_state_list()
                 state_array = each_state.get_normalized_state_array()
@@ -376,12 +375,10 @@ class MPERunner(MlpRunner):
             state = np.concatenate(obs, -1)
             obs = np.array(obs)
             obs = np.expand_dims(obs, axis=0)
-            print("obs:", obs.shape)
             share_obs = obs.reshape(n_rollout_threads, -1)
 
             # agent_obs = np.concatenate(obs)
             agent_obs = np.transpose(obs, (1, 0, 2))
-            print("agent_obs:", agent_obs.shape)
 
             for agent_id, p_id in zip(self.agent_ids, self.policy_ids):
                 policy = self.policies[p_id]
@@ -435,7 +432,7 @@ class MPERunner(MlpRunner):
 
             next_obs = []
             for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                each_state = env.get_state_per_mobile_device(mobile_device_id)
                 state_array = each_state.get_normalized_state_array()
                 next_obs.append(state_array)
             next_state = np.concatenate(next_obs, -1)
@@ -460,10 +457,10 @@ class MPERunner(MlpRunner):
                 infos.append({'individual_reward': reward})
             # infos[:, :] = {'individual_reward': reward}
             infos = [infos]
-            print("next_obs:", next_obs.shape)
-            print("rewards:", rewards)
-            print("dones:", dones.shape)
-            print("infos:", infos)
+            # print("next_obs:", next_obs.shape)
+            # print("rewards:", rewards)
+            # print("dones:", dones.shape)
+            # print("infos:", infos)
 
             episode_rewards.append(rewards)
             dones_env = np.all(dones, axis=1)
@@ -527,7 +524,7 @@ class MPERunner(MlpRunner):
                                    step_avail_acts,
                                    step_next_avail_acts)
 
-            print("step_rewards:", step_rewards)
+            # print("step_rewards:", step_rewards)
             if not warmup:
                 step_action_dict[str(step)] = step_acts_json
 

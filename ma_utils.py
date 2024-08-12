@@ -144,7 +144,6 @@ class ReplayBuffer(object):
             u.append(np.array(U, copy=False))
             r.append(np.array(R, copy=False))
             d.append(np.array(D, copy=False))
-            # print("np.array(o):", np.array(o))
 
         return np.array(o), np.array(x), np.array(y), np.array(o_), np.array(u), np.array(r).reshape(-1, 1), np.array(
             d).reshape(-1, 1), np.array(ep_reward)
@@ -175,15 +174,11 @@ class embedding_Buffer(object):
 
     def rank_storage(self, current_policy_reward):
 
-        print("step 0:", self.pos_storage_reward)
         index = np.argsort(self.pos_storage_reward)
 
-        print("test 1:",index)
-        print("test 2:",self.pos_storage)
         self.pos_storage_reward = list(np.array(self.pos_storage_reward)[index])
 
         self.pos_storage = list(np.array(self.pos_storage)[index])
-        print("test 3:",self.pos_storage)
         start_index = 0
         for i, d in enumerate(self.pos_storage_reward):
             if d > current_policy_reward:
@@ -287,54 +282,6 @@ class embedding_Buffer(object):
             self.neg_storage.append(data)
             self.neg_ptr = (self.neg_ptr + 1) % self.max_max_size
 
-    # def caculate_Q(self,actor,critic,device):
-    #     q_list = []
-    #     obs_list =[]
-    #     state_list =[]
-    #     for d in self.pos_storage:
-    #         obs_list.append(d[1])
-    #         state_list.append(d[2])
-    #
-    #     for i in range(0,len(self.pos_storage),100):
-    #         pos_obs = np.array(obs_list)[i:i+100]
-    #         pos_state = np.array(state_list)[i:i + 100]
-    #
-    #         pos_obs = torch.FloatTensor(pos_obs).to(device)
-    #         pos_state = torch.FloatTensor(pos_state).to(device)
-    #         action_list =[]
-    #
-    #         #print("2222 ",pos_obs[:, 0].shape)
-    #         #print("3333 ",pos_obs[:, 1].shape)
-    #         for i in range(2):
-    #             action_list.append(actor[i](pos_obs[:, i])[0])
-    #         current_Q = critic(pos_state, torch.cat(action_list, 1))
-    #         q_list.extend(list(current_Q.cpu().data.numpy()))
-    #     self.pos_Q = np.reshape(q_list,[-1])
-    #     #self.pos_adv = (self.pos_storage_reward - self.pos_Q) / np.abs(np.max(self.pos_storage_reward - self.pos_Q))
-    #
-    #     obs_list = []
-    #     state_list = []
-    #     for d in self.neg_storage:
-    #         obs_list.append(d[1])
-    #         state_list.append(d[2])
-    #     q_list = []
-    #     for i in range(0, len(self.neg_storage), 100):
-    #         neg_obs = np.array(obs_list)[i:i + 100]
-    #         neg_state = np.array(state_list)[i:i + 100]
-    #         neg_obs = torch.FloatTensor(neg_obs).to(device)
-    #         neg_state = torch.FloatTensor(neg_state).to(device)
-    #         action_list = []
-    #         for i in range(2):
-    #             action_list.append(actor[i](neg_obs[:, i])[0])
-    #         current_Q = critic(neg_state, torch.cat(action_list, 1))
-    #         q_list.extend(list(current_Q.cpu().data.numpy()))
-    #     self.neg_Q =  np.reshape(q_list,[-1])
-    #
-    #     #self.neg_adv = (self.neg_Q - self.neg_storage_reward)/np.abs(np.max(self.neg_Q - self.neg_storage_reward))
-    #
-    #     self.pos_adv = (self.pos_storage_reward) / np.abs(np.max(self.pos_storage_reward ))
-    #     self.neg_adv = (self.neg_storage_reward) / np.abs(np.max(self.neg_storage_reward))
-
     def sample_pos(self, batch_size):
         ind = np.random.randint(0, len(self.pos_storage), size=batch_size)
         embedding_list, obs_list, state_list = [], [], []
@@ -356,9 +303,6 @@ class embedding_Buffer(object):
         storage = self.pos_storage
         for store_item in storage:
             embedding, obs, state = store_item
-            # print("embedding:", np.array(embedding).shape)
-            # print("obs:", np.array(obs).shape)
-            # print("state:", np.array(state).shape)
             store_item = tuple(np.array(arr).tolist() for arr in store_item)
             store_item_list.append(store_item)
         print("storage size:", len(store_item_list))
@@ -371,8 +315,6 @@ class embedding_Buffer(object):
         np.save(npy_pos_storage_reward, np.array(self.pos_storage_reward))
         with open(json_file_name, 'w') as f:
             json.dump(store_item_list, f)
-        # if buffer_name == 'good' and len(self.pos_storage) >= 500:
-        #     exit()
 
     def load_buffer_from_file(self, filename, directory, buffer_name='good'):
         npy_ptr = os.path.join(directory, filename + '_' + buffer_name + 'ptr.npy')

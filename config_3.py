@@ -56,7 +56,7 @@ class MobileDeviceConfig:
             [0.3031, 0.301]
         ])
         self.transmitting_time_to_base_station_max = 0.5
-        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 700000 * 1000 * 10
+        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 900000 * 1000 * 10
         self.task_queue_size_max = 100
 
 

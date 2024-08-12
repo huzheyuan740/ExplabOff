@@ -52,7 +52,7 @@ class MPERunner(Runner):
                 obs = []
                 num_agent = len(env.base_station_set.all_mobile_device_list)
                 for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                    each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                    each_state = env.get_state_per_mobile_device(mobile_device_id)
                     state_class_list.append(each_state)
                     state_list = each_state.get_state_list()
                     state_array = each_state.get_normalized_state_array()
@@ -60,7 +60,6 @@ class MPERunner(Runner):
                 state = np.concatenate(obs, -1)
                 obs = np.array(obs)
                 obs = np.expand_dims(obs, axis=0)
-                print("obs:", obs.shape)
                 # share_obs = obs.reshape(n_rollout_threads, -1)
 
                 # Sample actions
@@ -96,7 +95,7 @@ class MPERunner(Runner):
 
                 next_obs = []
                 for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                    each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                    each_state = env.get_state_per_mobile_device(mobile_device_id)
                     state_array = each_state.get_normalized_state_array()
                     next_obs.append(state_array)
                 next_state = np.concatenate(next_obs, -1)
@@ -223,7 +222,7 @@ class MPERunner(Runner):
         obs = []
         num_agent = len(self.envs.base_station_set.all_mobile_device_list)
         for mobile_device_id in range(len(self.envs.base_station_set.all_mobile_device_list)):
-            each_state = self.envs.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+            each_state = self.envs.get_state_per_mobile_device(mobile_device_id)
             state_class_list.append(each_state)
             state_list = each_state.get_state_list()
             state_array = each_state.get_normalized_state_array()

@@ -84,7 +84,7 @@ class Runner(object):
         # 2024 new baseline
         env = EnvironmentManager(self.mec_config)
         env.reset()
-        num_agents = env.base_station_set.mobile_device_num  # 本算法将MD的数量作为智能体的数量
+        num_agents = env.base_station_set.mobile_device_num
         assert num_agents == self.num_agents
         obs_shape_n = []
         action_shape_n = []

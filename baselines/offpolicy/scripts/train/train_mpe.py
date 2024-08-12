@@ -1,5 +1,6 @@
-from distutils.util import strtobool 
+from distutils.util import strtobool
 import os, sys
+
 sys.path.append(os.path.abspath(os.getcwd()))
 
 import numpy as np
@@ -15,7 +16,6 @@ from tensorboardX import SummaryWriter
 from utils.utils import print_args, print_box, connected_to_internet
 from baselines.offpolicy.config import get_config
 from baselines.offpolicy.utils.util import get_cent_act_dim, get_dim_from_space
-from multiagent.MPE_env import MPEEnv
 from baselines.offpolicy.envs.env_wrappers import DummyVecEnv, SubprocVecEnv
 
 from config import GlobalConfig
@@ -23,40 +23,6 @@ from agent.state import State
 from agent.action import Action
 from mec_env.base_station_set import BaseStationSet
 from mec_env.environment_manager import EnvironmentManager
-
-
-def make_train_env(all_args):
-    def get_env_fn(rank):
-        def init_env():
-            if all_args.env_name == "MPE":
-                env = MPEEnv(all_args)
-            else:
-                print(f"Can not support the {all_args.env_name} environment.")
-                raise NotImplementedError
-            env.seed(all_args.seed + rank * 1000)
-            return env
-        return init_env
-    if all_args.n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(all_args.n_rollout_threads)])
-
-
-def make_eval_env(all_args):
-    def get_env_fn(rank):
-        def init_env():
-            if all_args.env_name == "MPE":
-                env = MPEEnv(all_args)
-            else:
-                print(f"Can not support the {all_args.env_name} environment.")
-                raise NotImplementedError
-            env.seed(all_args.seed * 50000 + rank * 10000)
-            return env
-        return init_env
-    if all_args.n_eval_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(all_args.n_eval_rollout_threads)])
 
 
 def parse_args(args, parser):
@@ -67,25 +33,25 @@ def parse_args(args, parser):
                         default=3, help="number of agents")
     parser.add_argument('--use_same_share_obs', action='store_false',
                         default=True, help="Whether to use available actions")
-    parser.add_argument('--num_obstacles', type=int, default=3, 
+    parser.add_argument('--num_obstacles', type=int, default=3,
                         help="Number of obstacles")
-    parser.add_argument("--collaborative", type=lambda x:bool(strtobool(x)), 
-                    default=True, help="Number of agents in the env")
-    parser.add_argument("--max_speed", type=float, default=2, 
+    parser.add_argument("--collaborative", type=lambda x: bool(strtobool(x)),
+                        default=True, help="Number of agents in the env")
+    parser.add_argument("--max_speed", type=float, default=2,
                         help="Max speed for agents. NOTE that if this is None, "
-                        "then max_speed is 2 with discrete action space")
-    parser.add_argument("--collision_rew", type=float, default=5, 
+                             "then max_speed is 2 with discrete action space")
+    parser.add_argument("--collision_rew", type=float, default=5,
                         help="The reward to be negated for collisions with other "
-                        "agents and obstacles")
-    parser.add_argument("--goal_rew", type=float, default=5, 
+                             "agents and obstacles")
+    parser.add_argument("--goal_rew", type=float, default=5,
                         help="The reward to be added if agent reaches the goal")
-    parser.add_argument("--min_dist_thresh", type=float, default=0.05, 
+    parser.add_argument("--min_dist_thresh", type=float, default=0.05,
                         help="The minimum distance threshold to classify whether "
-                        "agent has reached the goal or not")
-    parser.add_argument("--use_dones", type=lambda x:bool(strtobool(x)), 
-                        default=False, help="Whether we want to use the 'done=True' " 
-                        "when agent has reached the goal or just return False like "
-                        "the `simple.py` or `simple_spread.py`")
+                             "agent has reached the goal or not")
+    parser.add_argument("--use_dones", type=lambda x: bool(strtobool(x)),
+                        default=False, help="Whether we want to use the 'done=True' "
+                                            "when agent has reached the goal or just return False like "
+                                            "the `simple.py` or `simple_spread.py`")
     parser.add_argument("--id", default="default")
 
     all_args = parser.parse_known_args(args)[0]
@@ -109,14 +75,14 @@ def main(args):
         print("Choose to use cpu...")
         device = torch.device("cpu")
         torch.set_num_threads(all_args.n_training_threads)
-    
+
     print_args(all_args)
     global_config = GlobalConfig()
     train_config = global_config.train_config
 
     # setup file to output tensorboard, hyperparameters, and saved models
     run_dir = Path(os.path.split(os.path.dirname(os.path.abspath(__file__)))[
-                0] + "/results") / all_args.env_name / all_args.id / all_args.algorithm_name / all_args.experiment_name
+                       0] + "/results") / all_args.env_name / all_args.id / all_args.algorithm_name / all_args.experiment_name
 
     if not run_dir.exists():
         os.makedirs(str(run_dir))
@@ -130,35 +96,35 @@ def main(args):
             # home folder as {'my_wandb_api_key': 'INSERT API HERE'}
             # NOTE this is only for running on systems without internet access
             # have to run `wandb sync wandb/run_name` to sync logs to wandboard
-            with open(os.path.expanduser('~')+'/keys.json') as json_file: 
+            with open(os.path.expanduser('~') + '/keys.json') as json_file:
                 key = json.load(json_file)
-                my_wandb_api_key = key['my_wandb_api_key'] # NOTE change here as well
+                my_wandb_api_key = key['my_wandb_api_key']  # NOTE change here as well
             os.environ["WANDB_API_KEY"] = my_wandb_api_key
             os.environ["WANDB_MODE"] = "dryrun"
             os.environ['WANDB_SAVE_CODE'] = "true"
 
         # init wandb
-        print('_'*50)
+        print('_' * 50)
         print('Creating wandboard...')
-        print('_'*50)
+        print('_' * 50)
         run = wandb.init(config=all_args,
-                        project=all_args.project_name,
-                        # project=all_args.env_name,
-                        entity=all_args.user_name,
-                        notes=socket.gethostname(),
-                        name=str(all_args.algorithm_name) + "_" +
-                        str(all_args.experiment_name) +
-                        "_seed" + str(all_args.seed),
-                        # group=all_args.scenario_name,
-                        dir=str(run_dir),
-                        # job_type="training",
-                        reinit=True)
+                         project=all_args.project_name,
+                         # project=all_args.env_name,
+                         entity=all_args.user_name,
+                         notes=socket.gethostname(),
+                         name=str(all_args.algorithm_name) + "_" +
+                              str(all_args.experiment_name) +
+                              "_seed" + str(all_args.seed),
+                         # group=all_args.scenario_name,
+                         dir=str(run_dir),
+                         # job_type="training",
+                         reinit=True)
     else:
         if not run_dir.exists():
             curr_run = 'run1'
         else:
             exst_run_nums = [int(str(folder.name).split('run')[
-                                1]) for folder in run_dir.iterdir() if str(folder.name).startswith('run')]
+                                     1]) for folder in run_dir.iterdir() if str(folder.name).startswith('run')]
             if len(exst_run_nums) == 0:
                 curr_run = 'run1'
             else:
@@ -168,9 +134,9 @@ def main(args):
             os.makedirs(str(run_dir))
 
     setproctitle.setproctitle(str(all_args.algorithm_name) + "-" + \
-                            str(all_args.env_name) + "-" + \
-                            str(all_args.experiment_name) + "@" + \
-                            str(all_args.user_name))
+                              str(all_args.env_name) + "-" + \
+                              str(all_args.experiment_name) + "@" + \
+                              str(all_args.user_name))
 
     # set seeds
     torch.manual_seed(all_args.seed)
@@ -183,7 +149,7 @@ def main(args):
     # env = make_train_env(all_args)
     env = EnvironmentManager(global_config)
     env.reset()
-    num_agents = env.base_station_set.mobile_device_num  # 本算法将MD的数量作为智能体的数量
+    num_agents = env.base_station_set.mobile_device_num
     print("all_args:\n", all_args)
     obs_shape_n = []
     action_shape_n = []
@@ -201,13 +167,14 @@ def main(args):
     if all_args.share_policy:
         policy_info = {
             'policy_0': {"cent_obs_dim": sum(obs_shape_n),
-                        "cent_act_dim": sum(action_shape_n),
-                        "obs_space": obs_shape_n[0],
-                        "share_obs_space": sum(obs_shape_n),
-                        "act_space": action_shape_n[0]}
+                         "cent_act_dim": sum(action_shape_n),
+                         "obs_space": obs_shape_n[0],
+                         "share_obs_space": sum(obs_shape_n),
+                         "act_space": action_shape_n[0]}
         }
 
-        def policy_mapping_fn(id): return 'policy_0'
+        def policy_mapping_fn(id):
+            return 'policy_0'
     else:
         policy_info = {
             'policy_' + str(agent_id): {"cent_obs_dim": sum(obs_shape_n),
@@ -218,7 +185,8 @@ def main(args):
             for agent_id in range(num_agents)
         }
 
-        def policy_mapping_fn(agent_id): return 'policy_' + str(agent_id)
+        def policy_mapping_fn(agent_id):
+            return 'policy_' + str(agent_id)
 
     # choose algo
     if all_args.algorithm_name in ["rmatd3", "rmaddpg", "rmasac", "qmix", "vdn"]:
@@ -233,16 +201,16 @@ def main(args):
         raise NotImplementedError
 
     config = {"args": all_args,
-            "policy_info": policy_info,
-            "policy_mapping_fn": policy_mapping_fn,
-            "env": env,
-            "eval_env": eval_env,
-            "num_agents": num_agents,
-            "device": device,
-            "use_same_share_obs": all_args.use_same_share_obs,
-            "global_config": global_config,
-            "run_dir": run_dir
-            }
+              "policy_info": policy_info,
+              "policy_mapping_fn": policy_mapping_fn,
+              "env": env,
+              "eval_env": eval_env,
+              "num_agents": num_agents,
+              "device": device,
+              "use_same_share_obs": all_args.use_same_share_obs,
+              "global_config": global_config,
+              "run_dir": run_dir
+              }
 
     total_num_steps = 0
     runner = Runner(config=config)

@@ -10,7 +10,7 @@ import gym
 import argparse
 
 import ma_utils
-import algorithms.mpe_new_maxminMADDPG as MA_MINE_DDPG
+import algorithms.mec_maxminMADDPG as MA_MINE_DDPG
 import algorithms.dynamic_mec_new_maxminMADDPG as DYNAMIC_DDPG
 import math
 import os
@@ -66,9 +66,9 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     random.seed(args.seed)
 
-    file_name_origin = "PMIC_%s_%s_%s_%s_%s" % (
+    file_name_origin = "ExplabOff_%s_%s_%s_%s_%s" % (
         args.MI_update_freq, args.max_adv_c, args.min_adv_c, args.env_name, args.seed)
-    file_name = "PMIC_%s_%s_%s_%s_%s_%s" % (
+    file_name = "ExplabOff_%s_%s_%s_%s_%s_%s" % (
         args.MI_update_freq, args.max_adv_c, args.min_adv_c, args.env_name, args.seed, str(args.id))
 
     writer = SummaryWriter(log_dir="./tensorboard/" + file_name_origin + '/' + str(args.id))
@@ -199,7 +199,7 @@ if __name__ == "__main__":
                 MI_lower_bound_list_list = []
                 training_reward_list_list = []
                 training_reward_Q_list_list = []
-                training_r_PMIC_list_list = []
+                training_r_ExplabOff_list_list = []
 
                 for i in range(1):
                     update_signal = False
@@ -235,7 +235,7 @@ if __name__ == "__main__":
                         else:
                             process_min_MI_loss = 0.0
                             process_max_MI_loss = 0.0
-                        process_Q, process_min_MI, process_max_MI, Q_grads, MI_grads, MI_upper_bound_list, MI_lower_bound_list, training_reward_list, training_reward_Q_list, training_r_PMIC_list = policy.train_actor_with_mine(
+                        process_Q, process_min_MI, process_max_MI, Q_grads, MI_grads, MI_upper_bound_list, MI_lower_bound_list, training_reward_list, training_reward_Q_list, training_r_ExplabOff_list = policy.train_actor_with_mine(
                             replay_buffer, 1, args.batch_size, args.discount, args.tau, max_mi_c=0.0, min_mi_c=0.0,
                             min_adv_c=args.min_adv_c, max_adv_c=args.max_adv_c, total_timesteps=total_timesteps,
                             update_signal=update_signal)
@@ -244,21 +244,19 @@ if __name__ == "__main__":
                         MI_lower_bound_list_list.append(MI_lower_bound_list)
                         training_reward_list_list.append(training_reward_list)
                         training_reward_Q_list_list.append(training_reward_Q_list)
-                        training_r_PMIC_list_list.append(training_r_PMIC_list)
-                        print("MI_upper_bound_list_list:", MI_upper_bound_list_list)
-                        print("MI_lower_bound_list_list:", MI_lower_bound_list_list)
+                        training_r_ExplabOff_list_list.append(training_r_ExplabOff_list)
 
                         upper_bound = np.mean(MI_upper_bound_list_list)
                         lower_bound = np.mean(MI_lower_bound_list_list)
                         training_reward = np.mean(training_reward_list_list)
                         training_reward_Q = np.mean(training_reward_Q_list_list)
-                        training_r_PMIC = np.mean(training_r_PMIC_list_list)
+                        training_r_ExplabOff = np.mean(training_r_ExplabOff_list_list)
                         writer.add_scalar("data/upper_bound", upper_bound, total_timesteps)
                         writer.add_scalar("data/lower_bound", lower_bound, total_timesteps)
                         writer.add_scalar("data/upper_bound-lower_bound", upper_bound - lower_bound, total_timesteps)
                         writer.add_scalar("data/training_reward", training_reward, total_timesteps)
                         writer.add_scalar("data/training_reward_Q", training_reward_Q, total_timesteps)
-                        writer.add_scalar("data/training_r_PMIC", training_r_PMIC, total_timesteps)
+                        writer.add_scalar("data/training_r_ExplabOff", training_r_ExplabOff, total_timesteps)
 
                     process_max_MI_list.append(process_max_MI)
                     process_Q_list.append(process_Q)
@@ -324,7 +322,7 @@ if __name__ == "__main__":
         action_class_list = []
 
         for i in range(n_agents):
-            a = policy.select_action(obs[i], i)  # 注 由状态到动作
+            a = policy.select_action(obs[i], i)
             scaled_a = np.multiply(a, 1.0)
             scaled_a = np.clip(scaled_a, -0.9999, 0.9999)
             meaningful_scaled_a = scaled_a
@@ -366,9 +364,7 @@ if __name__ == "__main__":
         state = next_state
 
         episode_timesteps += 1
-        print("2episode_timesteps:", episode_timesteps)
-        # if 2 < episode_timesteps < train_config.step_num:
-        #     exit()
+        print("episode_timesteps:", episode_timesteps)
         total_timesteps += 1
         timesteps_since_eval += 1
 

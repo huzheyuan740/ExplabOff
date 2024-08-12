@@ -10,7 +10,7 @@ import gym
 import argparse
 
 import ma_utils
-import algorithms.mpe_new_maxminMADDPG as MA_MINE_DDPG
+import algorithms.mec_maxminMADDPG as MA_MINE_DDPG
 import algorithms.dynamic_mec_new_maxminMADDPG as DYNAMIC_DDPG
 import math
 import os
@@ -91,8 +91,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--policy_name", default="DYNAMIC")  # Policy name
-    parser.add_argument("--env_name", default="HalfCheetah-v1")  # OpenAI gym environment name
-    parser.add_argument("--seed", default=1, type=int)  # Sets Gym, PyTorch and Numpy seeds
+    parser.add_argument("--env_name", default="HalfCheetah-v1")  # environment name
+    parser.add_argument("--seed", default=1, type=int)  # Sets Envs, PyTorch and Numpy seeds
     parser.add_argument("--batch_size", default=1024, type=int)  # Batch size for both actor and critic
     parser.add_argument("--discount", default=0.95, type=float)  # Discount factor
     parser.add_argument("--tau", default=0.01, type=float)  # Target network update rate
@@ -113,9 +113,9 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     random.seed(args.seed)
 
-    file_name_origin = "PMIC_%s_%s_%s_%s_%s" % (
+    file_name_origin = "ExplabOff_%s_%s_%s_%s_%s" % (
         args.MI_update_freq, args.max_adv_c, args.min_adv_c, args.env_name, args.seed)
-    file_name = "PMIC_%s_%s_%s_%s_%s_%s" % (
+    file_name = "ExplabOff_%s_%s_%s_%s_%s_%s" % (
         args.MI_update_freq, args.max_adv_c, args.min_adv_c, args.env_name, args.seed, str(args.id))
 
     writer = SummaryWriter(log_dir="./tensorboard_new/" + file_name_origin + '/' + str(args.id))
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     env = EnvironmentManager(global_config)
     env.reset()
 
-    n_agents = env.base_station_set.mobile_device_num  # 本算法将MD的数量作为智能体的数量
+    n_agents = env.base_station_set.mobile_device_num
     print("n_agent:", n_agents)
     obs_shape_n = []
     action_shape_n = []
@@ -216,7 +216,6 @@ if __name__ == "__main__":
             eposide_num += 1
             for d in replay_buffer_recorder:
                 replay_buffer.add(d, episode_reward)
-            print("episode_reward:", episode_reward)
             if total_timesteps != 0:
 
                 # walker 50
@@ -309,7 +308,7 @@ if __name__ == "__main__":
                 MI_lower_bound_list_list = []
                 training_reward_list_list = []
                 training_reward_Q_list_list = []
-                training_r_PMIC_list_list = []
+                training_r_ExplabOff_list_list = []
 
                 for i in range(1):
                     update_signal = False
@@ -342,7 +341,7 @@ if __name__ == "__main__":
                         else:
                             process_min_MI_loss = 0.0
                             process_max_MI_loss = 0.0
-                        process_Q, process_min_MI, process_max_MI, Q_grads, MI_grads, MI_upper_bound_list, MI_lower_bound_list, training_reward_list, training_reward_Q_list, training_r_PMIC_list = policy.train_actor_with_mine(
+                        process_Q, process_min_MI, process_max_MI, Q_grads, MI_grads, MI_upper_bound_list, MI_lower_bound_list, training_reward_list, training_reward_Q_list, training_r_ExplabOff_list = policy.train_actor_with_mine(
                             replay_buffer, 1, args.batch_size, args.discount, args.tau, max_mi_c=0.0, min_mi_c=0.0,
                             min_adv_c=args.min_adv_c, max_adv_c=args.max_adv_c, total_timesteps=total_timesteps,
                             update_signal=update_signal)
@@ -351,21 +350,19 @@ if __name__ == "__main__":
                         MI_lower_bound_list_list.append(MI_lower_bound_list)
                         training_reward_list_list.append(training_reward_list)
                         training_reward_Q_list_list.append(training_reward_Q_list)
-                        training_r_PMIC_list_list.append(training_r_PMIC_list)
-                        print("MI_upper_bound_list_list:", MI_upper_bound_list_list)
-                        print("MI_lower_bound_list_list:", MI_lower_bound_list_list)
+                        training_r_ExplabOff_list_list.append(training_r_ExplabOff_list)
 
                         upper_bound = np.mean(MI_upper_bound_list_list)
                         lower_bound = np.mean(MI_lower_bound_list_list)
                         training_reward = np.mean(training_reward_list_list)
                         training_reward_Q = np.mean(training_reward_Q_list_list)
-                        training_r_PMIC = np.mean(training_r_PMIC_list_list)
+                        training_r_ExplabOff = np.mean(training_r_ExplabOff_list_list)
                         writer.add_scalar("data/upper_bound", upper_bound, total_timesteps)
                         writer.add_scalar("data/lower_bound", lower_bound, total_timesteps)
                         writer.add_scalar("data/upper_bound-lower_bound", upper_bound - lower_bound, total_timesteps)
                         writer.add_scalar("data/training_reward", training_reward, total_timesteps)
                         writer.add_scalar("data/training_reward_Q", training_reward_Q, total_timesteps)
-                        writer.add_scalar("data/training_r_PMIC", training_r_PMIC, total_timesteps)
+                        writer.add_scalar("data/training_r_ExplabOff", training_r_ExplabOff, total_timesteps)
 
                     process_max_MI_list.append(process_max_MI)
                     process_Q_list.append(process_Q)
@@ -384,16 +381,12 @@ if __name__ == "__main__":
             env.reset()
             obs = []
             for mobile_device_id in range(len(env.base_station_set.all_mobile_device_list)):
-                each_state = env.get_state_per_mobile_device(mobile_device_id)  # 只有调用这个方法才能得到state对象
+                each_state = env.get_state_per_mobile_device(mobile_device_id)
                 state_array = each_state.get_normalized_state_array()
                 obs.append(state_array)
             state = np.concatenate(obs, -1)
 
-            # print("ep reward ", episode_reward)
             moving_avg_reward_list.append(episode_reward)
-            # obs = env.reset()
-
-            # writer.add_scalar("data/run_reward", episode_reward, total_timesteps)
 
             done = False
 
@@ -411,7 +404,6 @@ if __name__ == "__main__":
             replay_buffer_recorder = []
             best_reward_start = -1
             best_reward = -1000000
-            # FIXME 1020
             Mi_list = []
 
             if total_timesteps % (4e5 - 1) == 0:
@@ -460,7 +452,6 @@ if __name__ == "__main__":
 
         done = any(done_list)
 
-        terminal = False
         terminal = (episode_timesteps + 1 >= train_config.step_num)
         done = done or terminal
         done_bool = float(done or terminal)
@@ -479,7 +470,7 @@ if __name__ == "__main__":
         state = next_state
 
         episode_timesteps += 1
-        print("2episode_timesteps:", episode_timesteps)
+        print("episode_timesteps:", episode_timesteps)
         total_timesteps += 1
         timesteps_since_eval += 1
 

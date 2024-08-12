@@ -25,7 +25,7 @@ class BaseStationSetConfig:
     def __init__(self):
         self.base_station_num = 2
         self.mobile_device_num = 5
-        self.time_step_max = 1  # 每个时间片的长度
+        self.time_step_max = 1
 
         self.base_station_config = BaseStationConfig()
         self.mobile_device_config = MobileDeviceConfig()
@@ -35,14 +35,14 @@ class BaseStationSetConfig:
 class BaseStationConfig:
     def __init__(self):
         self.base_station_computing_ability = 6.0
-        self.base_station_computing_ability_list = [10.0, 19.0]  # 单位改为GHz
+        self.base_station_computing_ability_list = [10.0, 19.0]
         self.base_station_computing_ability_eval = 8.8
         self.base_station_computing_ability_eval_list = [8.6]  # [8.8 * 10 ** 9, 9.3 * 10 ** 9]
         self.base_station_computing_ability_max = 25.0
         self.base_station_computing_ability_eval_max = 18
         self.base_station_energy = 200.0
         self.base_station_height = 20.0
-        self.task_queue_size_max = 100  # TODO 这里需要根据任务的大小 MD设备的数量和时间片的数量等因素进行计算确定
+        self.task_queue_size_max = 100
 
 
 class MobileDeviceConfig:
@@ -58,17 +58,16 @@ class MobileDeviceConfig:
             [0.3021, 0.302],
             [0.3031, 0.301]
         ])
-        self.transmitting_time_to_base_station_max = 0.5  # TODO 待定
-        # 能量目前暂时用不到
-        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 700000 * 1000 * 10
-        self.task_queue_size_max = 100  # TODO 这里需要根据任务的大小 MD设备的数量和时间片的数量等因素进行计算确定
+        self.transmitting_time_to_base_station_max = 0.5
+        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 900000 * 1000 * 10
+        self.task_queue_size_max = 100
 
 
 class TaskConfig:
     def __init__(self):
         self.task_data_size_min = 0
         self.task_data_size_max = 20
-        self.task_data_size_now = [6 + 1, 5 + 1, 2 + 1, 3 + 1, 4 + 1]  # 任务的计算量的均值好和标准差改为量化的消耗计算能力的份数
+        self.task_data_size_now = [6 + 1, 5 + 1, 2 + 1, 3 + 1, 4 + 1]
         self.origin_task_data_size_now = copy.deepcopy(self.task_data_size_now)  #
         self.task_data_index_list = list(range(len(self.task_data_size_now)))
         self.task_data_size_now_eval = [7]
@@ -76,15 +75,15 @@ class TaskConfig:
         self.task_date_size_std_eval = [0.1, 0.2]
         self.task_date_size_std_max = 0.5
         self.task_date_size_std_min = 0
-        self.task_switch_time_matrix_on_base_station = np.array([  # TODO 之后需要根据具体的计算进行修改
+        self.task_switch_time_matrix_on_base_station = np.array([
             [0.101, 0.102],
             [0.103, 0.104],
             [0.105, 0.106],
             [0.101, 0.102],
             [0.103, 0.104],
         ])
-        self.task_tolerance_delay_list = [2.208, 2.206, 2.205, 2.206, 2.205]  # TODO 之后需要根据具体的计算进行修改
-        # self.task_tolerance_delay_list = [1.808, 1.806, 1.805, 1.806, 1.805]  # TODO 之后需要根据具体的计算进行修改
+        self.task_tolerance_delay_list = [2.208, 2.206, 2.205, 2.206, 2.205]
+        # self.task_tolerance_delay_list = [1.808, 1.806, 1.805, 1.806, 1.805]
         self.task_tolerance_delay_max = 5
 
 
@@ -100,8 +99,7 @@ class RewardConfig:
         self.init_reward = 0  #
         self.mean_reward = self.init_reward
         self.lowest_reward = -10000
-        # self.adjust_bias = 10000  # 暂时用不到了 这是把不过是否惩罚的-reward全都平移到了大于0的区间
-        self.adjust_bias_for_normal = 60  # 只对正常的 没违反约束的任务加入偏执奖励
+        self.adjust_bias_for_normal = 60
 
 
 class EnvInterfaceConfig:
@@ -114,28 +112,24 @@ class StateConfig:
     def __init__(self):
         self.control_config = ControlConfig()
         self.train_config = TrainConfig()
-        self.dimension = 9  # (self.hexagon_network_config.user_equipment_num + 1) * 2  # 20
-        # if self.train_config.algorithm == 'ddpg':
-        #     self.dimension *= self.ue_num
+        self.dimension = 9
 
 
 class ActionConfig:
     def __init__(self):
-        # self.hexagon_network_config = HexagonNetworkConfig()
         self.control_config = ControlConfig()
         self.train_config = TrainConfig()
-        # self.ue_num = self.hexagon_network_config.user_equipment_num
         self.dimension = 2
         self.action_noise = np.random.uniform(0, 1, self.dimension)
         self.action_noise_decay = 0.995
-        self.threshold_to_offload = 0.0  # 0.5
+        self.threshold_to_offload = 0.0
 
 
 class TorchConfig:
     def __init__(self):
         self.gamma = 0.98
         self.hidden_sizes = (128, 128)
-        self.buffer_size = int(4e3)  # int(4e3)
+        self.buffer_size = int(4e3)
         self.max_seq_length = 50
         # self.buffer_size = int(64)
         self.batch_size = 4
@@ -180,5 +174,5 @@ class GlobalConfig:
     def __init__(self):
         self.train_config = TrainConfig()
         self.agent_config = AgentConfig()
-        self.base_station_set_config = BaseStationSetConfig()  # 相当于HexagonNetworkConfig()
+        self.base_station_set_config = BaseStationSetConfig()
         self.interface_config = EnvInterfaceConfig()

@@ -60,7 +60,7 @@ class MobileDeviceConfig:
             [0.3031, 0.301, 0.302],
         ])
         self.transmitting_time_to_base_station_max = 0.5
-        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 700000 * 1000 * 10
+        self.user_equipment_energy = (10 ** -27) * ((1 * 10 ** 9) ** 2) * 900000 * 1000 * 10
         self.task_queue_size_max = 100
 
 
@@ -96,7 +96,6 @@ class CostConfig:
 
 class RewardConfig:
     def __init__(self):
-        # self.penalty_over_time = -1000
         self.cost_to_reward = -10
         self.init_reward = 0  #
         self.mean_reward = self.init_reward
